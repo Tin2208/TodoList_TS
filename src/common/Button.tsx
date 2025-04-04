@@ -13,7 +13,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={`bg-[#646ff0] text-white font-medium p-2 px-5 rounded-[6px] cursor-pointer transition duration-200 ease-in-out  ${className}`}
+      className={` text-white font-medium p-2 px-5 rounded-[6px] cursor-pointer transition duration-200 ease-in-out  ${className}`}
       onClick={onClick}
     >
       {children}

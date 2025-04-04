@@ -7,14 +7,13 @@ import { useState, useEffect, useReducer } from "react";
 import "@ant-design/v5-patch-for-react-19";
 import { notification } from "antd";
 
-type Task = {
+export type Task = {
   id: number;
   title: string;
   status: "incomplete" | "complete";
   date: string;
 };
 
-// Define action type for the reducer
 type Action = { type: string };
 
 const Content = () => {
@@ -29,7 +28,6 @@ const Content = () => {
     "all"
   );
 
-  // Define the success action types for notification messages
   const ADD_SUCCESS = "ADD_SUCCESS";
   const DELETE_SUCCESS = "DELETE_SUCCESS";
   const EDIT_SUCCESS = "EDIT_SUCCESS";
@@ -37,7 +35,6 @@ const Content = () => {
   const NOCHANGE_ERROR = "NOCHANGE_ERROR";
   const ENTERTITLE_ERROR = "ENTERTITLE_ERROR";
 
-  // Reducer to handle success messages
   const reducer = (state: { [key: string]: boolean }, action: Action) => {
     switch (action.type) {
       case ADD_SUCCESS:
@@ -71,7 +68,23 @@ const Content = () => {
     enterTitleError: false,
   });
 
-  // Handle notifications when a task is added, deleted, or edited
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  useEffect(() => {
+    const syncTasks = () => {
+      const storedTasks = localStorage.getItem("tasks");
+      if (storedTasks) {
+        setTasks(JSON.parse(storedTasks));
+      } else {
+        setTasks([]);
+      }
+    };
+    window.addEventListener("storage", syncTasks);
+    return () => window.removeEventListener("storage", syncTasks);
+  }, []);
+
   useEffect(() => {
     if (state.addSuccess) {
       notification.success({
@@ -119,14 +132,12 @@ const Content = () => {
     }
   }, [state]);
 
-  // Handlers for triggering success actions
   const handleAdd = () => dispatch({ type: ADD_SUCCESS });
   const handleDelete = () => dispatch({ type: DELETE_SUCCESS });
   const handleEdit = () => dispatch({ type: EDIT_SUCCESS });
   const handleNoChange = () => dispatch({ type: NOCHANGE_ERROR });
   const handleEnterTitle = () => dispatch({ type: ENTERTITLE_ERROR });
 
-  
   const handleEditTaskClick = (task: Task) => {
     setTaskToEdit(task);
     setIsOpenEditModal(true);
@@ -154,8 +165,6 @@ const Content = () => {
     };
     const updatedTasks = [...tasks, newTask];
     setTasks(updatedTasks);
-
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setIsModalOpen(false);
     handleAdd();
   };
@@ -172,7 +181,7 @@ const Content = () => {
     }
     const currentTask = tasks.find((task) => task.id === id);
     if (!currentTask) return;
-    if (currentTask.title === newTitle) {
+    if (currentTask.title === newTitle && currentTask.status === newStatus) {
       handleNoChange();
       return;
     }
@@ -181,9 +190,7 @@ const Content = () => {
         ? { ...task, title: newTitle, status: newStatus, date: newTime }
         : task
     );
-
     setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setIsOpenEditModal(false);
     handleEdit();
   };
@@ -204,7 +211,6 @@ const Content = () => {
   const handleDeleteTask = (id: number) => {
     const updatedTasks = tasks.filter((task) => task.id !== id);
     setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     handleDelete();
   };
 
@@ -212,10 +218,9 @@ const Content = () => {
     setFilter(filter);
   };
 
-  const filterTasks = tasks.filter((task) => {
-    if (filter === "all") return true;
-    return task.status === filter;
-  });
+  const filterTasks = tasks.filter((task) =>
+    filter === "all" ? true : task.status === filter
+  );
 
   return (
     <div className="max-w-[750px] mx-auto flex flex-col gap-[1rem]">
@@ -245,6 +250,7 @@ const Content = () => {
           onSave={editTask}
           handleNoChange={handleNoChange}
           handleEnterTitle={handleEnterTitle}
+          handleEdit={handleEdit}
         />
       )}
     </div>

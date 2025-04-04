@@ -7,13 +7,18 @@ type TaskControlsProps = {
   onAddSuccess: () => void;
 };
 
-const TaskControls: React.FC<TaskControlsProps> = ({ onAddTaskClick, onFilterChange }) => {
-  const handleFilterChange =(e:React.ChangeEvent<HTMLSelectElement>) => {
+const TaskControls: React.FC<TaskControlsProps> = ({
+  onAddTaskClick,
+  onFilterChange,
+}) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onFilterChange(e.target.value as "all" | "incomplete" | "complete");
-  }
+  };
   return (
     <div className="flex justify-between items-center">
-      <Button onClick={onAddTaskClick}>Add Task</Button>
+      <Button className="bg-[#646ff0]" onClick={onAddTaskClick}>
+        Add Task
+      </Button>
       <select
         className="bg-[#cccdde] border-0 text-[#585858] cursor-pointer p-2.5 rounded-[6px] text-[16px]"
         name=""

@@ -3,6 +3,7 @@ import { IoMdClose } from "react-icons/io";
 import { useState } from "react";
 import Button from "../common/Button";
 import TimeStamp from "../common/TimeStamp";
+import { Task } from "../layouts/Content";
 
 type EditTaskModelProps = {
   task: {
@@ -20,6 +21,7 @@ type EditTaskModelProps = {
   ) => void;
   handleNoChange: () => void;
   handleEnterTitle: () => void;
+  handleEdit: () => void;
 };
 
 const EditTaskModel: React.FC<EditTaskModelProps> = ({
@@ -28,23 +30,35 @@ const EditTaskModel: React.FC<EditTaskModelProps> = ({
   onSave,
   handleNoChange,
   handleEnterTitle,
+  handleEdit,
 }) => {
   const [hover, setHover] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [status, setStatus] = useState<"incomplete" | "complete">(task.status);
 
   useEffect(() => {
-    setTitle(task.title);
+    setTitle(task.title.trim());
     setStatus(task.status);
   }, [task]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const storedTasks = localStorage.getItem("tasks");
+    const tasksFromStorage: Task[] = storedTasks ? JSON.parse(storedTasks) : [];
+
+    if (!tasksFromStorage.length || !task) {
+      handleEdit();
+      onClose();
+      return;
+    }
+
     if (!title.trim()) {
       handleEnterTitle();
       return;
     }
-    if (task.title === title) {
+
+    if (task.title === title && task.status === status) {
       handleNoChange();
       return;
     }
@@ -99,11 +113,13 @@ const EditTaskModel: React.FC<EditTaskModelProps> = ({
             </label>
           </div>
           <div className="flex gap-[10px]">
-            <Button onClick={handleSubmit}>Update Task</Button>
             <Button
-              className="!hover:bg-[#cccdde] !text-[#646681]"
-              onClick={onClose}
+              className="hover:bg-[#5059d6] bg-[#646ff0]"
+              onClick={(e) => handleSubmit(e)}
             >
+              Add Task
+            </Button>
+            <Button className="bg-[#cccdde] !text-[#646681]" onClick={onClose}>
               Cancel
             </Button>
           </div>

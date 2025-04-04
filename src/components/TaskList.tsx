@@ -44,7 +44,9 @@ const TaskList: React.FC<TaskListProps> = ({
         tasks.map((task) => (
           <div
             key={task.id}
-            className="bg-white rounded-[4px] p-[10px] flex justify-between items-center"
+            className={`bg-white rounded-[4px] p-[10px] flex justify-between items-center ${
+              task.id === tasks[tasks.length - 1].id ? "" : "mb-[15px]"
+            }`}
           >
             <div className="flex items-center gap-[1rem]">
               <div
