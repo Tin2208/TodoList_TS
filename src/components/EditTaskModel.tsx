@@ -98,9 +98,12 @@ const EditTaskModel: React.FC<EditTaskModelProps> = ({
               </select>
             </label>
           </div>
-          <div>
+          <div className="flex gap-[10px]">
             <Button onClick={handleSubmit}>Update Task</Button>
-            <Button className="bg-[#cccdde] !text-[#646681]" onClick={onClose}>
+            <Button
+              className="!hover:bg-[#cccdde] !text-[#646681]"
+              onClick={onClose}
+            >
               Cancel
             </Button>
           </div>

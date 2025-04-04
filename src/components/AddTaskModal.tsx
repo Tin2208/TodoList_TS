@@ -51,8 +51,13 @@ const AddTaskModel: React.FC<AddTaskModelProps> = ({ onClose, addTask }) => {
               </select>
             </label>
           </div>
-          <div>
-            <Button onClick={(e) => handleSubmit(e)}>Add Task</Button>
+          <div className="flex  gap-[10px]">
+            <Button
+              className="hover:bg-[#5059d6]"
+              onClick={(e) => handleSubmit(e)}
+            >
+              Add Task
+            </Button>
             <Button className="bg-[#cccdde] !text-[#646681]" onClick={onClose}>
               Cancel
             </Button>

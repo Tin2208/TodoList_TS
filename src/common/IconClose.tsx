@@ -13,7 +13,7 @@ const IconClose: React.FC<IconCloseProps> = ({
   size = 25,
   color = "#585858",
   onClick,
-  hoverColor = "#e32525",
+  hoverColor = "#fff",
 }) => {
   const [hover, setHover] = useState(false);
   return (

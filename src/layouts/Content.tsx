@@ -126,7 +126,7 @@ const Content = () => {
   const handleNoChange = () => dispatch({ type: NOCHANGE_ERROR });
   const handleEnterTitle = () => dispatch({ type: ENTERTITLE_ERROR });
 
-  // Task manipulation methods
+  
   const handleEditTaskClick = (task: Task) => {
     setTaskToEdit(task);
     setIsOpenEditModal(true);
