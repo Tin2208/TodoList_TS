@@ -7,9 +7,14 @@ type AddTaskModelProps = {
   onClose: () => void;
   addTask: (title: string, status: "incomplete" | "complete") => void;
   onEditSuccess: () => void;
+  handleEnterTitle: () => void;
 };
 
-const AddTaskModel: React.FC<AddTaskModelProps> = ({ onClose, addTask }) => {
+const AddTaskModel: React.FC<AddTaskModelProps> = ({
+  onClose,
+  addTask,
+  handleEnterTitle,
+}) => {
   const [status, setStatus] = useState<"incomplete" | "complete">("incomplete");
   const [title, setTitle] = useState("");
 
@@ -17,6 +22,10 @@ const AddTaskModel: React.FC<AddTaskModelProps> = ({ onClose, addTask }) => {
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
+    if (!title.trim()) {
+      handleEnterTitle();
+      return;
+    }
     if (title.trim()) {
       addTask(title, status);
     }

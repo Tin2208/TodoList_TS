@@ -241,6 +241,7 @@ const Content = () => {
           onClose={handleCloseModal}
           addTask={addTask}
           onEditSuccess={handleEdit}
+          handleEnterTitle={handleEnterTitle}
         />
       )}
       {isOpenEditModal && taskToEdit && (
